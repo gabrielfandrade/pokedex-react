@@ -1,0 +1,38 @@
+.pokemon {
+  margin-top: 50px;
+  margin-left: 50px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  height: 500px;
+  background-color: blue;
+  color: white;
+}
+
+.pokemon:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.pokemon-image {
+  padding: 10px;
+}
+
+.pokemon-image img {
+  background-color: white;
+  border-radius: 10px;
+  max-width: 90%;
+}
+
+.pokemon-types {
+  padding: 0px 50px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.pokemon-abilities {
+  padding: 0px 50px;
+  display: flex;
+  justify-content: space-around;
+}
