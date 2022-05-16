@@ -7,11 +7,11 @@ class Pokemon extends Component {
     loading: true,
   }
 
-  async fetchPokemon() {
+  async fetchPokemon(url) {
     this.setState(
       { loading: true },
       async () => {
-        const requestReturn = await fetch('https://pokeapi.co/api/v2/pokemon/487');
+        const requestReturn = await fetch(url);
         const requestPokemon = await requestReturn.json();
         this.setState({
           loading: false,
@@ -22,7 +22,8 @@ class Pokemon extends Component {
   }
 
   componentDidMount() {
-    this.fetchPokemon();
+    const { url } = this.props;
+    this.fetchPokemon(url);
   }
 
   renderPokemon = () => {
