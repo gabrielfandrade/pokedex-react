@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import './Pokemon.css';
+import Loading from './Loading';
 
 class Pokemon extends Component {
   state = {
@@ -7,10 +8,11 @@ class Pokemon extends Component {
     loading: true,
   }
 
-  async fetchPokemon(url) {
+  async fetchPokemon(name) {
     this.setState(
       { loading: true },
       async () => {
+        const url = `https://pokeapi.co/api/v2/pokemon/${name}`
         const requestReturn = await fetch(url);
         const requestPokemon = await requestReturn.json();
         this.setState({
@@ -22,18 +24,23 @@ class Pokemon extends Component {
   }
 
   componentDidMount() {
-    const { url } = this.props;
-    this.fetchPokemon(url);
+    const { name } = this.props;
+    this.fetchPokemon(name);
   }
 
-  renderPokemon = () => {
+  componentDidUpdate = (prevProps, prevState) => {
+    const { name } = this.props;
+    this.fetchPokemon(name);
+  }
+
+  renderPokemon = (pokemon) => {
     const {
       id,
       species,
       sprites,
       types,
       abilities,
-    } = this.state.pokemon;
+    } = pokemon;
 
     return (
       <div key={id} className='pokemon'>
@@ -44,33 +51,27 @@ class Pokemon extends Component {
           <h2>{species.name}</h2>
         </div>        
         <div className='pokemon-types'>
-          {types.map(({ type: type }) => (
-            <p>{type.name}</p>
+          {types.map((type) => (
+            <p className={type.type.name}>{type.type.name}</p>
           ))}
         </div>
         <div className='pokemon-abilities'>
-          {abilities.map(({ ability: ability }) => (
-            <p>{ability.name}</p>
+          {abilities.map((ability) => (
+            <p>{ability.ability.name}</p>
           ))}
         </div>
       </div>
     )
   }
 
-  loadingPokemon = () => {
-    const { loading } = this.state;
-
-    return loading
-      ? <span>Loadiang...</span>
-      : this.renderPokemon()
-  }
-
   render(){
-    const loadingElement = this.loadingPokemon();
+    const { pokemon, loading } = this.state;
+
+    if (loading) return <Loading />;
 
     return (
       <div>        
-        {loadingElement}
+        {this.renderPokemon(pokemon)}
       </div>
     );
   }
