@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Pokedex from './components/Pokedex';
+import Pokedex from './pages/Pokedex';
 
 class App extends Component{
   render() {
