@@ -5,12 +5,14 @@ class PokemonCard extends Component {
 
 
   render() {
-    const { name, image, types } = this.props;
+    const { id, name, image, types, showPokemonDetails } = this.props;
 
     return (
-      <div>
-        <Card sx={{ maxWidth: 300 }}>
-          <CardActionArea>
+      <div className='pokemon'>
+        <Card sx={{ maxWidth: 290 }}>
+          <CardActionArea value={ id }
+            onClick={ showPokemonDetails }
+          >
             <CardMedia
               component='img'
               height='max'
@@ -18,13 +20,13 @@ class PokemonCard extends Component {
               alt={ name }
             />
             <CardContent>
-              <Typography gutterBottom variant='h5' component='div'>
+              <Typography className='pokemon-name' gutterBottom variant='h5' component='div'>
                 {name}
               </Typography>
-              <Typography variant='h6' component='div'>
+              <Typography className='pokemon-types' variant='h6' component='div'>
                 {
                   types.map(({ type }) => 
-                    <Typography gutterBottom component='p'>
+                    <Typography key={type.name} className={type.name} gutterBottom component='p'>
                       {type.name} 
                     </Typography>)
                 }

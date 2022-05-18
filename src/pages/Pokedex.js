@@ -1,16 +1,26 @@
 import { Component } from 'react';
 import PokemonCard from '../components/PokemonCard';
-import { Skeleton } from '@mui/material';
-import '../components/Pokedex.css'
+import '../components/Pokedex.css';
+import '../components/Pokemon.css';
+import '../components/Types.css';
 
 class Pokedex extends Component {
   state = {
     pokemonList: [],
     hasPokemon: false,
+    pokemonFilter: '487',
+    pokemon: undefined,
+  }
+
+  sortPokemonList = async () => {
+    const { pokemonList } = this.state;
+    const sortedList = pokemonList.sort((a, b) => a.id - b.id );
+    this.setState({ 
+      pokemonList: sortedList,
+     })
   }
 
   fetchPokemonUrl = async (url) => {
-    console.log('pokemonUrl');
     await fetch(url)
       .then(response => response.json())
       .then(results => results.results.map(pokemon => (
@@ -19,37 +29,42 @@ class Pokedex extends Component {
   }
 
   fetchPokemonList = async (url) => {
-    console.log('pokemonList');
     await fetch(url)
       .then(response => response.json())
       .then(results => this.setState(prevState => ({
         pokemonList: [...prevState.pokemonList, results],
-        hasPokemon: true,
-      })))
+      }), () => this.sortPokemonList()));
   }
 
   componentDidMount = () => {
-    console.log("DidMount");
-    const url = 'https://pokeapi.co/api/v2/pokemon?limit=1&offset=486';
+    const url = 'https://pokeapi.co/api/v2/pokemon?limit=3&offset=486';
     this.fetchPokemonUrl(url);
+    this.setState({ hasPokemon: true });
+  }
+
+  componentWillUnmount = () => {
+    this.setState({ pokemonList: [], hasPokemon: false })
+  }
+
+  showPokemonDetails = ({ target }) => {
+    alert('click!');
   }
 
   render() {
     const { pokemonList, hasPokemon } = this.state;
 
     return (
-      <div>
-        {
-          hasPokemon
-            ? pokemonList.map(pokemon =>
-                <PokemonCard
-                  key={pokemon.name}
-                  name={pokemon.species.name} 
-                  image={pokemon.sprites.other}
-                  types={pokemon.types}
-                />) 
-            : <Skeleton variant="rectangular" width={210} height={118} />
-        }
+      <div className='pokedex'>
+        { hasPokemon 
+          && pokemonList.map(pokemon =>
+            <PokemonCard
+              key={pokemon.name}
+              id={pokemon.id}
+              name={pokemon.species.name} 
+              image={pokemon.sprites.other}
+              types={pokemon.types}
+              showPokemonDetails={this.showPokemonDetails}
+            />) }
       </div>
     )
   }
