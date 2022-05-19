@@ -1,8 +1,11 @@
 import { Component } from 'react';
+import PokemonMainCard from '../components/PokemonMainCard';
+import '../components/Pokemon.css';
 
 class Pokemon extends Component {
   state = {
-    pokemon: {},
+    pokemon: undefined,
+    hasPokemon: false,
   }
 
   fetchPokemon = async (url) => {
@@ -10,6 +13,7 @@ class Pokemon extends Component {
       .then(response => response.json())
       .then(result => this.setState({
         pokemon: result,
+        hasPokemon: true,
       }))
   }
 
@@ -20,11 +24,20 @@ class Pokemon extends Component {
   }
 
   render(){
-    const { pokemon } = this.state;
+    const { pokemon, hasPokemon } = this.state;
 
     return (
-      <div>
-        
+      <div className="pokemon-infos">
+        { hasPokemon &&
+            <PokemonMainCard
+              name={ pokemon.species.name }
+              types={ pokemon.types }
+              abilities={ pokemon.abilities }
+              height={ pokemon.height }
+              weight={ pokemon.weight }
+              sprite={ pokemon.sprites.other }
+            />
+        }
       </div>
     )
   }
