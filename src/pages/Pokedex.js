@@ -46,12 +46,9 @@ class Pokedex extends Component {
     this.setState({ pokemonList: [], hasPokemon: false })
   }
 
-  showPokemonDetails = ({ target }) => {
-    alert('click!');
-  }
-
   render() {
     const { pokemonList, hasPokemon } = this.state;
+    const { showPokemonDetails } = this.props;
 
     return (
       <div className='pokedex'>
@@ -63,7 +60,7 @@ class Pokedex extends Component {
               name={pokemon.species.name} 
               image={pokemon.sprites.other}
               types={pokemon.types}
-              showPokemonDetails={this.showPokemonDetails}
+              showPokemonDetails={showPokemonDetails}
             />) }
       </div>
     )

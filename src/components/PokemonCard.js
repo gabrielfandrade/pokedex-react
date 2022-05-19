@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { Card, CardMedia, CardActionArea, CardContent, Typography } from '@mui/material';
+import { Card, CardMedia, CardActions, CardActionArea, CardContent, Typography, Button } from '@mui/material';
 
 class PokemonCard extends Component {
 
@@ -10,9 +10,7 @@ class PokemonCard extends Component {
     return (
       <div className='pokemon'>
         <Card sx={{ maxWidth: 290 }}>
-          <CardActionArea value={ id }
-            onClick={ showPokemonDetails }
-          >
+          <CardActionArea>
             <CardMedia
               component='img'
               height='max'
@@ -33,6 +31,15 @@ class PokemonCard extends Component {
               </Typography>
             </CardContent>
           </CardActionArea>
+          <CardActions>
+            <Button 
+              size='small' 
+              color='primary' 
+              value={id} 
+              onClick={showPokemonDetails}>
+              Details
+            </Button>
+          </CardActions>
         </Card>
       </div>
     )

@@ -1,14 +1,32 @@
 import { Component } from 'react';
 
 class Pokemon extends Component {
-  componentDidMount() {
-    
+  state = {
+    pokemon: {},
+  }
+
+  fetchPokemon = async (url) => {
+    await fetch(url)
+      .then(response => response.json())
+      .then(result => this.setState({
+        pokemon: result,
+      }))
+  }
+
+  componentDidMount = () => {
+    const { id } = this.props;
+    const url = `https://pokeapi.co/api/v2/pokemon/${id}`
+    this.fetchPokemon(url);
   }
 
   render(){
-    console.log('Render');
+    const { pokemon } = this.state;
 
-    return
+    return (
+      <div>
+        
+      </div>
+    )
   }
 }
 
