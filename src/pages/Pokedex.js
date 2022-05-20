@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import { Navigate } from 'react-router-dom';
 import PokemonCard from '../components/PokemonCard';
 import '../components/Pokedex.css';
 import '../components/PokemonCard.css';
@@ -10,6 +11,7 @@ class Pokedex extends Component {
     hasPokemon: false,
     pokemonFilter: '487',
     pokemon: undefined,
+    redirect: false,
   }
 
   sortPokemonList = async () => {
@@ -46,9 +48,18 @@ class Pokedex extends Component {
     this.setState({ pokemonList: [], hasPokemon: false })
   }
 
+  showPokemonDetails = ({ target }) => {
+    const { value } = target;
+    this.setState({
+      pokemonFilter: value,
+      redirect: true,
+    });
+  }
+
   render() {
-    const { pokemonList, hasPokemon } = this.state;
-    const { showPokemonDetails } = this.props;
+    const { pokemonList, hasPokemon, redirect, pokemonFilter } = this.state;
+
+    if (redirect) return <Navigate to={`/pokemon/${pokemonFilter}`} />
 
     return (
       <div className='pokedex'>
@@ -60,7 +71,7 @@ class Pokedex extends Component {
               name={pokemon.species.name} 
               image={pokemon.sprites.other}
               types={pokemon.types}
-              showPokemonDetails={showPokemonDetails}
+              showPokemonDetails={this.showPokemonDetails}
             />) }
       </div>
     )
