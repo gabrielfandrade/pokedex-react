@@ -1,11 +1,17 @@
 import { Component } from 'react';
 
 class PokemonMainCard extends Component {
-  render() {
-    const { name, types, abilities, height, weight, sprite } = this.props;
+  totalStats = (stats) => {
+    return stats.reduce((sum, stat) => sum + stat.base_stat, 0);
+  }
 
-    const heightFormat = height.toString().split('').join('.');
-    const weightFormat = weight.toString();
+  render() {
+    const { name, types, abilities, height, weight, sprite, stats } = this.props;
+
+    let heightFormat = height.toString().split('').join('.');
+    let weightFormat = weight.toString();
+    if (heightFormat.length === 1) heightFormat = '0'.concat(heightFormat).split('').join('.');
+    if (weightFormat.length === 1) weightFormat = '0'.concat(weightFormat);
     const size = weightFormat.length;
 
     return (
@@ -55,6 +61,42 @@ class PokemonMainCard extends Component {
               <tr>
                 <th>Weight</th>
                 <td>{`${weightFormat.slice(0,size - 1)}.${weightFormat.slice(size - 1,size)} kg`}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div className="pokemon-stats">
+          <h3>Base stats</h3>
+          <table>
+            <tbody>
+              <tr>
+                <th>HP</th>
+                <td>{stats[0].base_stat}</td>
+                <td></td>
+              </tr>
+              <tr>
+                <th>Attack</th>
+                <td>{stats[1].base_stat}</td>
+              </tr>
+              <tr>
+                <th>Defense</th>
+                <td>{stats[2].base_stat}</td>
+              </tr>
+              <tr>
+                <th>Sp. Atk</th>
+                <td>{stats[3].base_stat}</td>
+              </tr>
+              <tr>
+                <th>Sp. Def</th>
+                <td>{stats[4].base_stat}</td>
+              </tr>
+              <tr>
+                <th>Speed</th>
+                <td>{stats[5].base_stat}</td>
+              </tr>
+              <tr>
+                <th>Total</th>
+                <td>{this.totalStats(stats)}</td>
               </tr>
             </tbody>
           </table>

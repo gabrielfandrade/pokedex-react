@@ -25,7 +25,7 @@ class Pokedex extends Component {
   fetchPokemonUrl = async (url) => {
     await fetch(url)
       .then(response => response.json())
-      .then(results => results.results.map(pokemon => (
+      .then(results => results.results.forEach(pokemon => (
         this.fetchPokemonList(pokemon.url)
       )))     
   }

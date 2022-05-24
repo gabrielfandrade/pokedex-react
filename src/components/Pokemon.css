@@ -1,5 +1,6 @@
 .pokemon-infos {
-  float: right;
+  display: flex;
+  justify-content: space-between;
   color: black;
 }
 
@@ -12,14 +13,15 @@
 }
 
 .pokemon-main-infos {
+  float: right;
   width: 100%;
 }
 
-.pokemon-main-infos h2 {
+.pokemon-main-infos h2, .pokemon-stats h3 {
   text-align: center;
 }
 
-.table {
+table {
   width: 100%;
   margin: 0 auto 1rem;
   border-collapse: collapse;
@@ -28,11 +30,11 @@
   text-indent: initial;
 }
 
-.table tr {
+table tr {
   display: table-row;
 }
 
-.table th {
+table th {
   width: 1px;
   white-space: nowrap;
   color: #737373;
@@ -41,13 +43,13 @@
   text-align: right;
 }
 
-.table td {
+table td {
   width: 10px;
   display: table-cell;
   vertical-align: inherit;
 }
 
-.table th, .table td {
+table th, table td {
   padding: 4px 10px;
   border-width: 1px 0;
   border-style: solid;

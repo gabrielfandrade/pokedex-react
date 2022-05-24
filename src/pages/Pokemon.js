@@ -1,20 +1,53 @@
 import { Component } from 'react';
 import PokemonMainCard from '../components/PokemonMainCard';
+import PokemonMovesCard from '../components/PokemonMovesCard';
 import '../components/Pokemon.css';
 
 class Pokemon extends Component {
   state = {
     pokemon: undefined,
+    moves: {
+      learntByLevelUp: [],
+      learntByTM: [],
+      learntByEggGroup: [],
+      learntByTutor: [],
+      learntByTR: [],
+    },
     hasPokemon: false,
+  }
+
+  fetchLevelUpMoves = async (move) => {
+    const { url } = move;
+    await fetch(url)
+      .then(response => response.json())
+      .then(result => this.setState((prevState) => ({
+        moves: {
+          learntByLevelUp: [...prevState.moves.learntByLevelUp, result],
+        }
+      })));
+  }
+
+  getMoveLearnMethod = (methods) => {
+    return methods[methods.length - 1].move_learn_method.name;
+  }
+
+  getMoves = (moves) => {
+    const movesLearnByLevelUp = moves.filter(move =>
+      this.getMoveLearnMethod(move.version_group_details) === 'level-up');
+    movesLearnByLevelUp.forEach(({ move }) =>
+      this.fetchLevelUpMoves(move));
   }
 
   fetchPokemon = async (url) => {
     await fetch(url)
       .then(response => response.json())
-      .then(result => this.setState({
-        pokemon: result,
-        hasPokemon: true,
-      }))
+      .then(result => {
+        this.setState({
+          pokemon: result,
+          hasPokemon: true,
+        });
+        this.getMoves(result.moves);
+      })
   }
 
   componentDidMount = () => {
@@ -24,10 +57,16 @@ class Pokemon extends Component {
   }
 
   render(){
-    const { pokemon, hasPokemon } = this.state;
+    const { pokemon, moves, hasPokemon } = this.state;
 
     return (
       <div className="pokemon-infos">
+        { hasPokemon &&
+            <PokemonMovesCard              
+              moves={moves}
+              levelUp={pokemon.moves}
+            />
+        }
         { hasPokemon &&
             <PokemonMainCard
               name={ pokemon.species.name }
@@ -36,8 +75,9 @@ class Pokemon extends Component {
               height={ pokemon.height }
               weight={ pokemon.weight }
               sprite={ pokemon.sprites.other }
+              stats={ pokemon.stats }
             />
-        }
+        }        
       </div>
     )
   }
