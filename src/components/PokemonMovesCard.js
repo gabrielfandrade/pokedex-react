@@ -21,7 +21,7 @@ class PokemonMovesCard extends Component {
   
   render() {
     const { moves, levelUp } = this.props;
-    const { learntByLevelUp, learntByTM } = moves;
+    const { learntByLevelUp, learntByTM, learntByTR } = moves;
 
     const levels = this.learntByLevelUp(levelUp);
 
@@ -76,6 +76,33 @@ class PokemonMovesCard extends Component {
                   <td>{move.tmMove.damage_class.name}</td>
                   <td>{move.tmMove.power}</td>
                   <td>{move.tmMove.accuracy}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="tr-moves">
+          <h2>Moves learnt by TR</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>TR</th>
+                <th>Move</th>
+                <th>Type</th>
+                <th>Cat.</th>
+                <th>Power</th>
+                <th>Acc.</th>
+              </tr>
+            </thead>
+            <tbody>
+              {learntByTR.map((move, index) => (
+                <tr key={ index }>
+                  <td>{move.trName.slice(-2)}</td>
+                  <td className="pokemon-move">{move.trMove.names[7].name}</td>
+                  <td className={`type-icon ${move.trMove.type.name}`}>{move.trMove.type.name}</td>
+                  <td>{move.trMove.damage_class.name}</td>
+                  <td>{move.trMove.power}</td>
+                  <td>{move.trMove.accuracy}</td>
                 </tr>
               ))}
             </tbody>
