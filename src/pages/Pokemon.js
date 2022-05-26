@@ -22,7 +22,20 @@ class Pokemon extends Component {
       .then(response => response.json())
       .then(result => this.setState((prevState) => ({
         moves: {
+          ...prevState.moves,
           learntByLevelUp: [...prevState.moves.learntByLevelUp, result],
+        }
+      })));
+  }
+
+  fetchTMMoves = async (move) => {
+    const { url } = move;
+    await fetch(url)
+      .then(response => response.json())
+      .then(result => this.setState((prevState) => ({
+        moves: {
+          ...prevState.moves,
+          learntByTM: [...prevState.moves.learntByTM, result],
         }
       })));
   }
@@ -31,11 +44,20 @@ class Pokemon extends Component {
     return methods[methods.length - 1].move_learn_method.name;
   }
 
+  checkLearnMethod = (methods, version, method) => {
+    const game = methods.filter((detail) => detail.version_group.name === version);    
+    return game.some((detail) => detail.move_learn_method.name === method);
+  }
+
   getMoves = (moves) => {
     const movesLearnByLevelUp = moves.filter(move =>
-      this.getMoveLearnMethod(move.version_group_details) === 'level-up');
+      this.checkLearnMethod(move.version_group_details, 'sword-shield', 'level-up'));
+    const movesLearnByTM = moves.filter(move =>
+      this.checkLearnMethod(move.version_group_details, 'sword-shield', 'machine'));      
     movesLearnByLevelUp.forEach(({ move }) =>
       this.fetchLevelUpMoves(move));
+    movesLearnByTM.forEach(({ move }) =>
+      this.fetchTMMoves(move));
   }
 
   fetchPokemon = async (url) => {
