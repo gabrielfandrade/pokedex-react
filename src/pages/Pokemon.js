@@ -28,18 +28,6 @@ class Pokemon extends Component {
       })));
   }
 
-  fetchTMMoves = async (move) => {
-    const { url } = move;
-    await fetch(url)
-      .then(response => response.json())
-      .then(result => this.setState((prevState) => ({
-        moves: {
-          ...prevState.moves,
-          learntByTM: [...prevState.moves.learntByTM, result],
-        }
-      })));
-  }
-
   getMoveLearnMethod = (methods) => {
     return methods[methods.length - 1].move_learn_method.name;
   }
@@ -49,15 +37,46 @@ class Pokemon extends Component {
     return game.some((detail) => detail.move_learn_method.name === method);
   }
 
+  fetchToList = async (move) => {
+    const game = move.machines.find((machine) => machine.version_group.name === 'sword-shield');
+    const url = game.machine.url;
+    await fetch(url)
+      .then(response => response.json())
+      .then(result => {
+        if (result.item.name.includes('tm')) {
+          this.setState((prevState) => ({
+            moves: {
+              ...prevState.moves,
+              learntByTM: [...prevState.moves.learntByTM, { tmMove: move, tmName: result.item.name }],
+            }
+          }))
+        } else {
+          this.setState((prevState) => ({
+            moves: {
+              ...prevState.moves,
+              learntByTR: [...prevState.moves.learntByTR, { trMove: move, trName: result.item.name }],
+            }
+          }))
+        }
+      })
+  }
+
+  fetchMachineMove = async (move) => {
+    const { url } = move;
+    await fetch(url)
+      .then(response => response.json())
+      .then(result => this.fetchToList(result))
+  }
+
   getMoves = (moves) => {
     const movesLearnByLevelUp = moves.filter(move =>
       this.checkLearnMethod(move.version_group_details, 'sword-shield', 'level-up'));
-    const movesLearnByTM = moves.filter(move =>
+    const movesLearnByMachine = moves.filter(move =>
       this.checkLearnMethod(move.version_group_details, 'sword-shield', 'machine'));      
     movesLearnByLevelUp.forEach(({ move }) =>
       this.fetchLevelUpMoves(move));
-    movesLearnByTM.forEach(({ move }) =>
-      this.fetchTMMoves(move));
+    movesLearnByMachine.forEach(({ move }) =>
+      this.fetchMachineMove(move));
   }
 
   fetchPokemon = async (url) => {

@@ -39,7 +39,7 @@ class Pokedex extends Component {
   }
 
   componentDidMount = () => {
-    const url = 'https://pokeapi.co/api/v2/pokemon?limit=3&offset=486';
+    const url = 'https://pokeapi.co/api/v2/pokemon?limit=898&offset=0';
     this.fetchPokemonUrl(url);
     this.setState({ hasPokemon: true });
   }

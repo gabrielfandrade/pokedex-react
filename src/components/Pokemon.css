@@ -4,6 +4,16 @@
   color: black;
 }
 
+.pokemon-moves {
+  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.pokemon-moves div {
+  padding: 10px;
+}
+
 .pokemon-sprites img {
   border: 0;
   max-width: 100%;
@@ -76,4 +86,17 @@ a {
   text-shadow: 1px 1px 2px rgb(0 0 0 / 70%);
   text-transform: uppercase;
   transition: opacity .4s;
+}
+
+.pokemon-moves th {
+  text-align: center;
+}
+
+.pokemon-moves td {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.pokemon-move {
+  white-space: nowrap;
 }
