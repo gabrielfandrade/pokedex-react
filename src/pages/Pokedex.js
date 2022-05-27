@@ -1,12 +1,19 @@
 import { Component } from 'react';
 import { Navigate } from 'react-router-dom';
+import { Pagination } from '@mui/material';
 import PokemonCard from '../components/PokemonCard';
 import '../components/Pokedex.css';
 import '../components/PokemonCard.css';
 import '../components/Types.css';
 
+const PAGES = [];
+for (let i = 0; i <= 898; i += 30) {
+  PAGES.push(i);
+}
 class Pokedex extends Component {
   state = {
+    page: 1,
+    filter: 0,
     pokemonList: [],
     hasPokemon: false,
     pokemonFilter: '487',
@@ -25,9 +32,13 @@ class Pokedex extends Component {
   fetchPokemonUrl = async (url) => {
     await fetch(url)
       .then(response => response.json())
-      .then(results => results.results.forEach(pokemon => (
-        this.fetchPokemonList(pokemon.url)
-      )))     
+      .then(results => { this.setState({
+          pokemonList: [],
+        });
+        results.results.forEach(pokemon => (
+          this.fetchPokemonList(pokemon.url)
+        ))}
+      )     
   }
 
   fetchPokemonList = async (url) => {
@@ -39,9 +50,18 @@ class Pokedex extends Component {
   }
 
   componentDidMount = () => {
-    const url = 'https://pokeapi.co/api/v2/pokemon?limit=898&offset=0';
+    const { filter } = this.state;
+    const url = `https://pokeapi.co/api/v2/pokemon?limit=30&offset=${filter}`;
     this.fetchPokemonUrl(url);
     this.setState({ hasPokemon: true });
+  }
+
+  componentDidUpdate = (_prevProps, prevState) => {
+    const { page, filter } = this.state;
+    if (page !== prevState.page) {
+      const url = `https://pokeapi.co/api/v2/pokemon?limit=30&offset=${filter}`;
+      this.fetchPokemonUrl(url);
+    }
   }
 
   componentWillUnmount = () => {
@@ -56,8 +76,17 @@ class Pokedex extends Component {
     });
   }
 
+  handleChange = ({ target }) => {
+    const { textContent } = target;
+    const page = parseInt(textContent, 10);
+    this.setState({
+      page,
+      filter: PAGES[page - 1],
+    });
+  }
+
   render() {
-    const { pokemonList, hasPokemon, redirect, pokemonFilter } = this.state;
+    const {pokemonList, hasPokemon, redirect, pokemonFilter } = this.state;
 
     if (redirect) return <Navigate to={`/pokemon/${pokemonFilter}`} />
 
@@ -73,6 +102,14 @@ class Pokedex extends Component {
               types={pokemon.types}
               showPokemonDetails={this.showPokemonDetails}
             />) }
+        <div className="pagination">
+          <Pagination
+            count={ PAGES.length }
+            variant="outlined"
+            shape="rounded"
+            onChange={ this.handleChange }
+          />
+        </div>
       </div>
     )
   }
