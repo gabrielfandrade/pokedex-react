@@ -2,6 +2,7 @@
   display: flex;
   justify-content: space-between;
   color: black;
+  padding: 0px 200px;
 }
 
 .pokemon-moves {
