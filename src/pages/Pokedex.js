@@ -1,7 +1,9 @@
 import { Component } from 'react';
 import { Navigate } from 'react-router-dom';
 import { Pagination } from '@mui/material';
+import { connect } from 'react-redux';
 import PokemonCard from '../components/PokemonCard';
+import pokedex from '../actions/PokedexAction';
 import '../components/Pokedex.css';
 import '../components/PokemonCard.css';
 import '../components/Types.css';
@@ -115,4 +117,12 @@ class Pokedex extends Component {
   }
 }
 
-export default Pokedex;
+const mapStateToProps = state => ({
+  pokemonList: state.PokedexReducer.pokemonList,
+});
+
+const mapDispatchToProps = dispatch => ({
+  updatePokedex: (state) => dispatch(pokedex(state)),
+});
+ 
+export default connect(mapStateToProps, mapDispatchToProps)(Pokedex);
