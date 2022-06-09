@@ -1,4 +1,4 @@
-import { POKEDEX } from '../actions';
+import { POKEDEX } from '../actions/PokedexAction';
 
 const INITIAL_STATE = {
   pokemonList: [],
