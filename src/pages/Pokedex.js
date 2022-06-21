@@ -1,9 +1,9 @@
 import { Component } from 'react';
-// import { Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 // import { Pagination } from '@mui/material';
 import { connect } from 'react-redux';
 import PokemonCard from '../components/PokemonCard';
-import pokedexAction from '../redux/actions/PokedexAction';
+import { fetchAllPokemon } from '../redux/actions/PokedexAction';
 import '../components/Pokedex.css';
 import '../components/PokemonCard.css';
 import '../components/Types.css';
@@ -18,12 +18,13 @@ class Pokedex extends Component {
     // filter: 0,
     pokemonList: [],
     hasPokemon: false,
-    // pokemonFilter: '487',
+    pokemonFilter: '487',
     // pokemon: undefined,
-    // redirect: false,
+    redirect: false,
   }
 
   sortPokemonList = () => {
+    console.log('chamei');
     const { pokemonList } = this.state;
     const sortedList = pokemonList.sort((a, b) => a.id - b.id );
     this.props.updatePokedex(sortedList);
@@ -43,14 +44,15 @@ class Pokedex extends Component {
       .then(response => response.json())
       .then(results => this.setState(prevState => ({
         pokemonList: [...prevState.pokemonList, results],
-      }), () => this.sortPokemonList()));
+      })));
   }
 
   componentDidMount = () => {
+    this.props.updatePokedex();
     // const { filter } = this.state;
-    const url = `https://pokeapi.co/api/v2/pokemon?limit=898&offset=0`;
-    this.fetchPokemonUrl(url);
-    this.setState({ hasPokemon: true });
+    // const url = `https://pokeapi.co/api/v2/pokemon?limit=10&offset=0`;
+    // this.fetchPokemonUrl(url);
+    // this.setState({ hasPokemon: true });
   }
 
   // componentDidUpdate = (_prevProps, prevState) => {
@@ -83,17 +85,20 @@ class Pokedex extends Component {
   // }
 
   render() {
-    const { hasPokemon } = this.state;
-    const { pokemonList } = this.props;
+    // const { hasPokemon, pokemonList, redirect, pokemonFilter } = this.state;
+    const { pokemonList, isLoading, error } = this.props;
+
+    if (isLoading) return <div>...Loading</div>
+
+    if (error) return <div>{error}</div>
 
     // if (redirect) return <Navigate to={`/pokemon/${pokemonFilter}`} />
 
-    if (!hasPokemon) return <div>Carregando...</div>
+    // if (!hasPokemon) return <div>Carregando...</div>
 
     return (
       <div className='pokedex'>
-        { hasPokemon 
-          && pokemonList.map(pokemon =>
+        { pokemonList.map(pokemon =>
             <PokemonCard
               key={pokemon.name}
               id={pokemon.id}
@@ -115,16 +120,15 @@ class Pokedex extends Component {
   }
 }
 
-const pokedexFilter = (pokemon) => {
-  return pokemon.id >= 0 && pokemon.id <= 30;
-};
-
-const mapStateToProps = (state) => ({
-  pokemonList: state.pokedexReducer.pokemonList.filter(pokedexFilter),
+const mapStateToProps = ({ 
+  pokedexReducer: { pokemonList, isLoading, error } }) => ({
+    pokemonList: pokemonList.sort((a, b) => a.id - b.id),
+    isLoading,
+    error,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  updatePokedex: (pokemonList) => dispatch(pokedexAction(pokemonList)),
+  updatePokedex: () => dispatch(fetchAllPokemon()),
 });
  
 export default connect(mapStateToProps, mapDispatchToProps)(Pokedex);
