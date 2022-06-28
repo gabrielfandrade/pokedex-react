@@ -4,9 +4,9 @@ import '../components/Loading.css';
 export default class Loading extends Component {
   render() {
     return (
-      <div class="wrapper">
-        <div class="pokeball" />          
-        <div class="loading-message">
+      <div className="wrapper">
+        <div className="pokeball" />          
+        <div className="loading-message">
           Loading...
         </div>
       </div>

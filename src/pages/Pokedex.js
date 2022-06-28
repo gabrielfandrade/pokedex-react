@@ -15,12 +15,9 @@ for (let i = 0; i <= 898; i += 30) {
 }
 class Pokedex extends Component {
   state = {
-    // page: 1,
-    // filter: 0,
     pokemonList: [],
     hasPokemon: false,
     pokemonFilter: '487',
-    // pokemon: undefined,
     redirect: false,
   }
 
@@ -50,23 +47,7 @@ class Pokedex extends Component {
 
   componentDidMount = () => {
     this.props.updatePokedex();
-    // const { filter } = this.state;
-    // const url = `https://pokeapi.co/api/v2/pokemon?limit=10&offset=0`;
-    // this.fetchPokemonUrl(url);
-    // this.setState({ hasPokemon: true });
   }
-
-  // componentDidUpdate = (_prevProps, prevState) => {
-  //   const { page, filter } = this.state;
-  //   if (page !== prevState.page) {
-  //     const url = `https://pokeapi.co/api/v2/pokemon?limit=30&offset=0`;
-  //     this.fetchPokemonUrl(url);
-  //   }
-  // }
-
-  // componentWillUnmount = () => {
-  //   this.setState({ pokemonList: [], hasPokemon: false })
-  // }
 
   showPokemonDetails = ({ target }) => {
     const { value } = target;
@@ -76,26 +57,12 @@ class Pokedex extends Component {
     });
   }
 
-  // handleChange = ({ target }) => {
-  //   const { textContent } = target;
-  //   const page = parseInt(textContent, 10);
-  //   this.setState({
-  //     page,
-  //     filter: PAGES[page - 1],
-  //   });
-  // }
-
   render() {
-    // const { hasPokemon, pokemonList, redirect, pokemonFilter } = this.state;
     const { pokemonList, isLoading, error } = this.props;
 
     if (isLoading) return <Loading />
 
     if (error) return <div>{error}</div>
-
-    // if (redirect) return <Navigate to={`/pokemon/${pokemonFilter}`} />
-
-    // if (!hasPokemon) return <div>Carregando...</div>
 
     return (
       <div className='pokedex'>
@@ -108,14 +75,6 @@ class Pokedex extends Component {
               types={pokemon.types}
               showPokemonDetails={this.showPokemonDetails}
             />) }
-        {/* <div className="pagination">
-          <Pagination
-            count={ PAGES.length }
-            variant="outlined"
-            shape="rounded"
-            onChange={ this.handleChange }
-          />
-        </div> */}
       </div>
     )
   }
