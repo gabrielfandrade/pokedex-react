@@ -2,6 +2,7 @@ import { Component } from 'react';
 import { Navigate } from 'react-router-dom';
 // import { Pagination } from '@mui/material';
 import { connect } from 'react-redux';
+import Loading from './Loading';
 import PokemonCard from '../components/PokemonCard';
 import { fetchAllPokemon } from '../redux/actions/PokedexAction';
 import '../components/Pokedex.css';
@@ -88,7 +89,7 @@ class Pokedex extends Component {
     // const { hasPokemon, pokemonList, redirect, pokemonFilter } = this.state;
     const { pokemonList, isLoading, error } = this.props;
 
-    if (isLoading) return <div>...Loading</div>
+    if (isLoading) return <Loading />
 
     if (error) return <div>{error}</div>
 
