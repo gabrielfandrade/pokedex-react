@@ -11,7 +11,9 @@ class PokemonCard extends Component {
     return (
       <div className='pokemon'>
         <Card sx={{ maxWidth: 290 }}>
-          <CardActionArea>
+          <CardActionArea
+            href={`/pokemon/${id}`}
+          >
             <CardMedia
               component='img'
               height='max'
