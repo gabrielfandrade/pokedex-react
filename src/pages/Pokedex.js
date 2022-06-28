@@ -49,14 +49,6 @@ class Pokedex extends Component {
     this.props.updatePokedex();
   }
 
-  showPokemonDetails = ({ target }) => {
-    const { value } = target;
-    this.setState({
-      pokemonFilter: value,
-      redirect: true,
-    });
-  }
-
   render() {
     const { pokemonList, isLoading, error } = this.props;
 
@@ -73,7 +65,6 @@ class Pokedex extends Component {
               name={pokemon.species.name} 
               image={pokemon.sprites.other}
               types={pokemon.types}
-              showPokemonDetails={this.showPokemonDetails}
             />) }
       </div>
     )

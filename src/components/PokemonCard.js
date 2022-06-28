@@ -1,11 +1,12 @@
 import { Component } from 'react';
-import { Card, CardMedia, CardActions, CardActionArea, CardContent, Typography, Button } from '@mui/material';
+import { Link } from "react-router-dom";
+import { Card, CardMedia, CardActions, CardActionArea, CardContent, Typography } from '@mui/material';
 
 class PokemonCard extends Component {
 
 
   render() {
-    const { id, name, image, types, showPokemonDetails } = this.props;
+    const { id, name, image, types } = this.props;
 
     return (
       <div className='pokemon'>
@@ -32,13 +33,11 @@ class PokemonCard extends Component {
             </CardContent>
           </CardActionArea>
           <CardActions>
-            <Button 
-              size='small' 
-              color='primary' 
-              value={id} 
-              onClick={showPokemonDetails}>
+            <Link
+              to={`/pokemon/${id}`}
+            >
               Details
-            </Button>
+            </Link>
           </CardActions>
         </Card>
       </div>
