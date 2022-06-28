@@ -16,7 +16,7 @@ const pokedexReducer = (state = INITIAL_STATE, action) => {
     case POKEDEX:
       return {
         ...state,
-        pokemonList: [...state.pokemonList, action.pokemon],
+        pokemonList: action.pokemon,
         isLoading: false,
       };
     case FAILED_REQUEST:
