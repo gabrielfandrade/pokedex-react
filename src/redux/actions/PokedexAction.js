@@ -17,8 +17,8 @@ export const failedRequest = (error) => ({
   error,
 })
 
-export const fetchAllPokemon = () => async (dispatch) => {
+export const fetchAllPokemon = (start) => async (dispatch) => {
   dispatch(requestAPI())
-  const pokemon = await fetchPokeAPI();
+  const pokemon = await fetchPokeAPI(start);
   dispatch(pokedexAction(pokemon));
 };

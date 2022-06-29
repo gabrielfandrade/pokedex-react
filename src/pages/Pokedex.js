@@ -1,6 +1,5 @@
 import { Component } from 'react';
-import { Navigate } from 'react-router-dom';
-// import { Pagination } from '@mui/material';
+import { Pagination } from '@mui/material';
 import { connect } from 'react-redux';
 import Loading from './Loading';
 import PokemonCard from '../components/PokemonCard';
@@ -9,48 +8,34 @@ import '../components/Pokedex.css';
 import '../components/PokemonCard.css';
 import '../components/Types.css';
 
-const PAGES = [];
-for (let i = 0; i <= 898; i += 30) {
-  PAGES.push(i);
-}
+const PAGE_COUNT = Math.round(898 / 30);
+
 class Pokedex extends Component {
   state = {
-    pokemonList: [],
-    hasPokemon: false,
-    pokemonFilter: '487',
-    redirect: false,
-  }
-
-  sortPokemonList = () => {
-    console.log('chamei');
-    const { pokemonList } = this.state;
-    const sortedList = pokemonList.sort((a, b) => a.id - b.id );
-    this.props.updatePokedex(sortedList);
-  }
-
-  fetchPokemonUrl = async (url) => {
-    await fetch(url)
-      .then(response => response.json())
-      .then(results => { results.results.forEach(pokemon => (
-          this.fetchPokemonList(pokemon.url)
-        ))}
-      )     
-  }
-
-  fetchPokemonList = async (url) => {
-    await fetch(url)
-      .then(response => response.json())
-      .then(results => this.setState(prevState => ({
-        pokemonList: [...prevState.pokemonList, results],
-      })));
+    page: 1,
   }
 
   componentDidMount = () => {
-    this.props.updatePokedex();
+    const { page } = this.state;
+    this.props.updatePokedex((page - 1) * 30);
   }
+
+  componentDidUpdate = (_prevProps, prevState) => {
+    const { page } = this.state;
+    if (page !== prevState.page) {
+      this.props.updatePokedex((page - 1) * 30);
+    }
+  }
+
+  handlePage = (_event, page) => {
+    this.setState({
+      page: page,
+    });
+  };
 
   render() {
     const { pokemonList, isLoading, error } = this.props;
+    const { page } = this.state;
 
     if (isLoading) return <Loading />
 
@@ -66,6 +51,17 @@ class Pokedex extends Component {
               image={pokemon.sprites.other}
               types={pokemon.types}
             />) }
+        <div className="pagination">
+          <Pagination
+            count={ PAGE_COUNT }
+            page={ page }
+            color="primary"
+            size="large"
+            showFirstButton
+            showLastButton
+            onChange={ this.handlePage }
+          />
+        </div>
       </div>
     )
   }
@@ -79,7 +75,7 @@ const mapStateToProps = ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  updatePokedex: () => dispatch(fetchAllPokemon()),
+  updatePokedex: (start) => dispatch(fetchAllPokemon(start)),
 });
  
 export default connect(mapStateToProps, mapDispatchToProps)(Pokedex);
