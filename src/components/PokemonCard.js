@@ -17,7 +17,7 @@ class PokemonCard extends Component {
             <CardMedia
               component='img'
               height='max'
-              image={ image['official-artwork'].front_default }
+              image={ image.home.front_default }
               alt={ name }
             />
             <CardContent>
