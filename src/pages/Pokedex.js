@@ -1,4 +1,4 @@
-import { Component, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Pagination } from '@mui/material';
 import { connect } from 'react-redux';
 import Loading from './Loading';
