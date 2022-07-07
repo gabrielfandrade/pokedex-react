@@ -16,6 +16,9 @@ function PokemonCard({ id, name, image, types }) {
             alt={name}
           />
           <CardContent>
+            <Typography className='pokemon-name' gutterBottom variant='h7' component='div'>
+              {`#${id}`}
+            </Typography>
             <Typography className='pokemon-name' gutterBottom variant='h5' component='div'>
               {name}
             </Typography>
